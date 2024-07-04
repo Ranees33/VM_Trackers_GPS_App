@@ -22,7 +22,6 @@ class TestLoginFunctionality:
         yield driver
         driver.close()
 
-
     def test_login_field_elements_displayed(self, launch_setup):
         driver = launch_setup
         driver.refresh()
@@ -49,7 +48,6 @@ class TestLoginFunctionality:
             print("Submit button field is displayed")
         else:
             print("Password field is not displayed")
-
 
     @pytest.mark.parametrize(
         "email, password, expected_result",
