@@ -22,6 +22,35 @@ class TestLoginFunctionality:
         yield driver
         driver.close()
 
+
+    def test_login_field_elements_displayed(self, launch_setup):
+        driver = launch_setup
+        driver.refresh()
+        email_field = driver.find_element(By.XPATH, "//input[@class='input-field']")
+        if email_field.is_displayed():
+            print("Email field is displayed")
+        else:
+            print("Email field is not displayed")
+
+        password_field = driver.find_element(By.ID, "pass")
+        if password_field.is_displayed():
+            print("Password field is displayed")
+        else:
+            print("Password field is not displayed")
+
+        forgotpass_field = driver.find_element(By.XPATH, "//div[text()='Forgot Password ?']")
+        if forgotpass_field.is_displayed():
+            print("Forgot password option field is displayed")
+        else:
+            print("Forgot password option field is not displayed")
+
+        submit_Btn_field = driver.find_element(By.ID, "loginSubmit")
+        if submit_Btn_field.is_displayed():
+            print("Submit button field is displayed")
+        else:
+            print("Password field is not displayed")
+
+
     @pytest.mark.parametrize(
         "email, password, expected_result",
         [
