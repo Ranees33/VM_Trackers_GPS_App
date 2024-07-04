@@ -8,7 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class TestForgotPassword:
+class TestForgotPasswordFunctionality:
 
     @pytest.fixture(scope="class")
     def setup(self):
@@ -76,6 +76,13 @@ class TestForgotPassword:
             assert expected_result in driver.page_source
         except:
             assert False, f"Expected result '{expected_result}' not found in page source"
+
+
+    def test_fp_cancel_btn(self, setup):
+        driver = setup
+        driver.refresh()
+        driver.find_element(By.XPATH, "//div[text()='Forgot Password ?']").click()
+        driver.find_element(By.XPATH, "//button[@class='sc-gLLuof eAgKZT']").click()
 
 
     if __name__ == "__main__":
