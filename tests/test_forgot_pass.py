@@ -23,18 +23,41 @@ class TestForgotPassword:
     @pytest.mark.parametrize(
         "email, expected_result",
         [
-            ("tonyboniee@gmail.com", "Check your email account for reset link!"),
-            # Valid registration
-            ("tonyboni@gmail.com", "Cannot reset password"),  # Username already exists
-            ("tonyboniee@gmail", "Invalid email"),  # Email already registered
+            ("tonyboni@gmail.com", "Cannot reset password"),
+            ("tonyboniee@gmail", "Invalid email"),
             ("", "Email cannot be empty"),  # Invalid email format
-            ("('tonyboniee@gmail.com'):", "Invalid email"),  # Password too short
-            ("TonyBoniee@Gmail.Com", "Cannot reset password"),  # Passwords do not match
-            (" tonyboniee@gmail.com ", "Cannot reset password"),  # All fields empty
+            ("('tonyboniee@gmail.com'):", "Invalid email"),
+            ("TonyBoniee@Gmail.Com", "Cannot reset password"),
+            (" tonyboniee@gmail.com ", "Cannot reset password"),
             ("tonyboniee@gmail.con", "Cannot reset password"),  # Email field empty
         ]
     )
     def test_forgot_password(self, setup, email, expected_result):
+        driver = setup
+        driver.refresh()
+        wait = WebDriverWait(driver, 10)
+        driver.find_element(By.XPATH, "//div[text()='Forgot Password ?']").click()
+        driver.find_element(By.XPATH, "//input[@class='input-field']").clear()
+        enter_Email = driver.find_element(By.XPATH, "//input[@class='input-field']")
+        enter_Email.send_keys(email)
+        driver.find_element(By.XPATH, "//button[@class='sc-gLLuof kuxdqO']").click()
+
+        # Use explicit wait to handle different scenarios
+        try:
+            wait.until(
+                EC.presence_of_element_located((By.XPATH, f"//*[contains(text(), '{expected_result}')]"))
+            )
+            assert expected_result in driver.page_source
+        except:
+            assert False, f"Expected result '{expected_result}' not found in page source"
+
+    @pytest.mark.parametrize(
+        "email, expected_result",
+        [
+            ("tonyboniee@gmail.com", "Check your email account for reset link!"),
+        ]
+    )
+    def test_forgot_password_and_sent_okay(self, setup, email, expected_result):
         driver = setup
         driver.refresh()
         wait = WebDriverWait(driver, 10)
@@ -53,6 +76,7 @@ class TestForgotPassword:
             assert expected_result in driver.page_source
         except:
             assert False, f"Expected result '{expected_result}' not found in page source"
+
 
     if __name__ == "__main__":
         pytest.main()
